@@ -1,0 +1,59 @@
+# clang-format for 42 cursus cpp programming
+# By: tkatsuma <tkatsuma@student.42tokyo.jp>
+
+# Base style: Google
+Language:		Cpp
+BasedOnStyle:	Google
+
+# Minor modifications
+Standard:		c++03 # clang-format only have > c++03 versions.
+IndentWidth:	2     # 4 (norm) -> 2 (google)
+ColumnLimit:	80    # Same as norm for c programming.
+UseTab:        	Never
+
+# C: int *n -> C++: int* n
+PointerAlignment:	Left
+
+# indent offset for public/private (Google style)
+AccessModifierOffset: -1
+
+# Automatically sort include order
+SortIncludes:    true
+# --- Spacing Rules (Like Norminette) ---
+
+# 1. Parentheses & Keywords
+# if (x) ... -> Space between 'if' and '('
+SpaceBeforeParens: ControlStatements
+# func(x)    -> No space between 'func' and '('
+# but allowing space for function declarations is optional (Google defaults to false)
+
+# 2. Operators
+# a = b; / a + b; -> Force spaces around operators
+SpaceBeforeAssignmentOperators: true
+SpaceAroundPointerQualifiers: Default
+
+# 3. Inside Braces
+# { 1, 2 } -> Spaces inside initializer lists
+SpacesInContainerLiterals: true
+
+# 4. Casting
+# (int)x -> No space after C-style cast (Standard C++ practice)
+SpaceAfterCStyleCast: false
+
+# --- Vertical Alignment (The "Norminette" Feel) ---
+
+# Align consecutive assignments:
+# int a    = 1;
+# int val  = 2;
+AlignConsecutiveAssignments: true
+
+# Align consecutive declarations:
+# int      a;
+# double   b;
+AlignConsecutiveDeclarations: true
+
+# Align macros (optional, nice for headers)
+AlignConsecutiveMacros: true
+
+# Align comments at the end of lines
+AlignTrailingComments: true

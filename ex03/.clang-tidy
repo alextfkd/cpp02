@@ -1,0 +1,76 @@
+# clang-format for 42 cursus cpp programming
+# By: tkatsuma <tkatsuma@student.42tokyo.jp>
+---
+# Use C++98 only (pedantic).
+# Do not lint included standard library.
+# Interplet Warnings as Errors.
+---
+## Max lines (C: 25 -> C++: 45)
+## Naming and prefix / suffix configs.
+# Class name: UpperCamelCase
+# Function name: UpperCamelCase
+# Variable name: snake_case
+# Private member name: snake_case, suffix: '_'
+# Struct member name: snake_case, suffix: '(none)'
+# Global constant prefix: 'k', name: CamelCase
+## Orthodox canonical form setting.
+# Do not allow sole default destructor (Requires orthodox canonical form).
+# Do not require Move functions which does not implemented in C++98.
+---
+Checks: >
+  -*,
+  bugprone-*,
+  readability-*,
+  portability-*,
+  performance-*,
+  -modernize-*,  # using C++98
+  readability-identifier-naming,
+  cppcoreguidelines-special-member-functions,
+  -readability-implicit-bool-conversion,
+  -readability-braces-around-statements
+---
+# Use C++98 only (pedantic).
+ExtraArgs: ['-std=c++98', '-pedantic', '-Wno-c++11-extensions']
+---
+# Do not lint included standard library.
+HeaderFilterRegex: '^(?!/usr/).*'  
+---
+# Interplet Warnings as Errors.
+WarningsAsErrors: ''
+---
+CheckOptions:
+  ## Max lines (C: 25 -> C++: 45)
+  - key:             readability-function-size.LineThreshold
+    value:           45
+  ## Naming and prefix / suffix configs.
+  # Class name: UpperCamelCase
+  - key:             readability-identifier-naming.ClassCase
+    value:           CamelCase
+  # Function name: UpperCamelCase
+  - key:             readability-identifier-naming.FunctionCase
+    value:           CamelCase
+  # Variable name: snake_case
+  - key:             readability-identifier-naming.VariableCase
+    value:           lower_case
+  # Private member name: snake_case, suffix: '_'
+  - key:             readability-identifier-naming.PrivateMemberCase
+    value:           lower_case
+  - key:             readability-identifier-naming.PrivateMemberSuffix
+    value:           _
+  # Struct member name: snake_case, suffix: '(none)'
+  - key:             readability-identifier-naming.StructMemberCase
+    value:           lower_case
+  - key:             readability-identifier-naming.StructMemberSuffix
+    value:           ''
+  # Global constant prefix: 'k', name: CamelCase
+  - key:             readability-identifier-naming.GlobalConstantPrefix
+    value:           k
+  - key:             readability-identifier-naming.GlobalConstantCase
+    value:           CamelCase
+  ## Orthodox canonical form setting.
+  # Do not allow sole default destructor (Requires orthodox canonical form).
+  - key:             cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
+    value:           false
+  # Do not require Move functions which does not implemented in C++98.
+  - key:             cppcoreguidelines-special-member-functions.AllowMissingMoveFunctions
+    value:           true
