@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:50:12 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/19 12:41:50 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:42:45 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ class Fixed {
   static const int kNbFractionalBits_ = 8;
   static const int kIntMax            = INT_MAX;
   static const int kIntMin            = INT_MIN;
-  bool             CheckOverflow(int lvalue, int rvalue);
+  static bool      CheckOverflow(int lvalue, int rvalue);
 
  public:
   Fixed();

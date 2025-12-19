@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:50:10 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/19 12:41:28 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:45:51 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,11 @@ bool Fixed::operator!=(const Fixed& other) const {
 bool Fixed::CheckOverflow(int lvalue, int rvalue) {
   if (lvalue > Fixed::kIntMax - rvalue) {
     return false;
-  } else if (lvalue < Fixed::kIntMin + rvalue) {
-    return false;
-  } else {
-    return true;
   }
+  if (lvalue < Fixed::kIntMin + rvalue) {
+    return false;
+  }
+  return true;
 }
 
 Fixed& Fixed::operator+(const Fixed& other) {
@@ -124,12 +124,12 @@ Fixed& Fixed::operator*(const Fixed& other) {
   }
   if (this->getRawBits() > Fixed::kIntMax / other.getRawBits()) {
     throw std::overflow_error("Overflow Error");
-  } else if (this->getRawBits() < Fixed::kIntMin / other.getRawBits()) {
-    throw std::overflow_error("Overflow Error");
-  } else {
-    this->setRawBits(this->getRawBits() * other.getRawBits() / int_frac_bits);
-    return *this;
   }
+  if (this->getRawBits() < Fixed::kIntMin / other.getRawBits()) {
+    throw std::overflow_error("Overflow Error");
+  }
+  this->setRawBits(this->getRawBits() * other.getRawBits() / int_frac_bits);
+  return *this;
 }
 
 Fixed& Fixed::operator/(const Fixed& other) {
@@ -142,12 +142,12 @@ Fixed& Fixed::operator/(const Fixed& other) {
   }
   if (this->getRawBits() > Fixed::kIntMax * other.getRawBits()) {
     throw std::overflow_error("Overflow Error");
-  } else if (this->getRawBits() < Fixed::kIntMin * other.getRawBits()) {
-    throw std::overflow_error("Overflow Error");
-  } else {
-    this->setRawBits(this->getRawBits() / other.getRawBits());
-    return *this;
   }
+  if (this->getRawBits() < Fixed::kIntMin * other.getRawBits()) {
+    throw std::overflow_error("Overflow Error");
+  }
+  this->setRawBits(this->getRawBits() / other.getRawBits());
+  return *this;
 }
 
 Fixed& Fixed::operator++() {
