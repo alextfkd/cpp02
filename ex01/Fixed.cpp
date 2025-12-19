@@ -6,24 +6,47 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:50:10 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/19 04:36:52 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/19 06:33:57 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Fixed.hpp"
+
+#include <limits>
+#include <stdexcept>
 
 Fixed::Fixed() : value_(0) {
   std::cout << "Default constructor called" << std::endl;
 }
 
 Fixed::Fixed(const int& num) : value_(0) {
+  int int_frac_bits = (1 << Fixed::kNbFractionalBits_);
+  int int_max       = std::numeric_limits<int>::max();
+  int int_min       = std::numeric_limits<int>::min();
+
   std::cout << "Int constructor called" << std::endl;
-  this->setRawBits(num * (1 << Fixed::kNbFractionalBits_));
+  if (num > 0 && (int_max / int_frac_bits) < num) {
+    throw std::overflow_error("Error: RawBits excessed INT_MAX");
+  }
+  if (num < 0 && (int_min / int_frac_bits) > num) {
+    throw std::overflow_error("Error: RawBits excessed INT_MIN");
+  }
+  this->setRawBits(num * int_frac_bits);
 }
 
 Fixed::Fixed(const float& num) : value_(0) {
+  int int_frac_bits = (1 << Fixed::kNbFractionalBits_);
+  int int_max       = std::numeric_limits<int>::max();
+  int int_min       = std::numeric_limits<int>::min();
+
   std::cout << "Float constructor called" << std::endl;
-  this->setRawBits(int(roundf(num * (1 << Fixed::kNbFractionalBits_))));
+  if (num > 0 && (int_max / int_frac_bits) < int(roundf(num))) {
+    throw std::overflow_error("Error: RawBits excessed INT_MAX");
+  }
+  if (num < 0 && (int_min / int_frac_bits) > int(roundf(num))) {
+    throw std::overflow_error("Error: RawBits excessed INT_MIN");
+  }
+  this->setRawBits(int(roundf(num * float(int_frac_bits))));
 }
 
 Fixed::~Fixed() { std::cout << "Destructor called" << std::endl; }
