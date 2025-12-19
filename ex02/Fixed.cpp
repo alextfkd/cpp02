@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:50:10 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/19 09:42:09 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:41:28 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,25 +185,24 @@ Fixed& Fixed::min(Fixed& left, Fixed& right) {
   }
   return left;
 }
-Fixed Fixed::min(const Fixed& left, const Fixed& right) {
+
+const Fixed& Fixed::min(const Fixed& left, const Fixed& right) {
   if (left > right) {
-    Fixed res = right;
-    return res;
+    return right;
   }
-  Fixed res = left;
-  return res;
+  return left;
 }
+
 Fixed& Fixed::max(Fixed& left, Fixed& right) {
   if (left < right) {
     return right;
   }
   return left;
 }
-Fixed Fixed::max(const Fixed& left, const Fixed& right) {
+
+const Fixed& Fixed::max(const Fixed& left, const Fixed& right) {
   if (left < right) {
-    Fixed res = right;
-    return res;
+    return right;
   }
-  Fixed res = left;
-  return res;
+  return left;
 }

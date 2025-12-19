@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:50:12 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/19 09:19:32 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/19 12:41:50 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,10 @@ class Fixed {
   Fixed& operator--();
   Fixed  operator--(int);
 
-  static Fixed& min(Fixed& left, Fixed& right);
-  static Fixed  min(const Fixed& left, const Fixed& right);
-  static Fixed& max(Fixed& left, Fixed& right);
-  static Fixed  max(const Fixed& left, const Fixed& right);
+  static Fixed&       min(Fixed& left, Fixed& right);
+  const static Fixed& min(const Fixed& left, const Fixed& right);
+  static Fixed&       max(Fixed& left, Fixed& right);
+  const static Fixed& max(const Fixed& left, const Fixed& right);
 
   ~Fixed();
 
