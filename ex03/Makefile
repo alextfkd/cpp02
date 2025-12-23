@@ -1,8 +1,8 @@
-NAME = harlFilter
+NAME = bsp
 
 CXX = c++ -g
 
-SRCS = main.cpp Harl.cpp
+SRCS = main.cpp Fixed.cpp Point.cpp bsp.cpp
 
 OBJS = $(addprefix ./, $(SRCS:.cpp=.o))
 
