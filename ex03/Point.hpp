@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:54 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/22 00:00:40 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/23 09:51:29 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,27 @@ class Point {
   Fixed x_;
   Fixed y_;
 
-  // Anything else useful.
-
  public:
   Point();
-  Point(Fixed x, Fixed y);
-  Point(float fx, float fy);
+  Point(Fixed x, Fixed y);    // NOLINT
+  Point(float fx, float fy);  // NOLINT
   Point(const Point& other);
   Point& operator=(const Point& other);
   ~Point();
 
-  void SetX(Fixed x);
-  void SetY(Fixed y);
+  void SetX(const Fixed& x);  // NOLINT
+  void SetY(const Fixed& y);  // NOLINT
 
   Fixed GetX() const;
   Fixed GetY() const;
-
-  // Anything else useful.
 };
 
-bool bsp(Point const a, Point const b, Point const c, Point const point);
+Fixed det(Point& vector0, Point& vector1);
+
+bool InverseMatrix(Point arr[2], Point& vector0, Point& vector1);
+// Point* InverseMatrix(Point& vector0, Point& vector1);
+
+bool bsp(Point const a, Point const b, Point const c,  // NOLINT
+         Point const point);                           // NOLINT
 
 #endif

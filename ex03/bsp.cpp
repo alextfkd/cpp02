@@ -6,12 +6,32 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 00:32:39 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/23 09:02:08 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/23 09:53:53 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Fixed.hpp"
 #include "Point.hpp"
+
+Fixed det(Point& vector0, Point& vector1) {
+  Fixed res =
+      Fixed(vector0.GetX() * vector1.GetY() - vector0.GetY() * vector1.GetX());
+  return res;
+}
+
+bool InverseMatrix(Point arr[2], Point& vector0, Point& vector1) {
+  Fixed abac_det = det(vector0, vector1);
+  if (abac_det == Fixed(0)) {
+    return false;
+  }
+  arr[0] = Point(vector1.GetY(), vector0.GetY() * Fixed(-1));
+  arr[1] = Point(vector1.GetX() * Fixed(-1), vector0.GetX());
+  arr[0].SetX(arr[0].GetX() / abac_det);
+  arr[0].SetY(arr[0].GetY() / abac_det);
+  arr[1].SetX(arr[1].GetX() / abac_det);
+  arr[1].SetY(arr[1].GetY() / abac_det);
+  return true;
+}
 
 bool bsp(Point const a, Point const b, Point const c, Point const point) {
   Point ab = Point(Fixed(b.GetX() - a.GetX()), Fixed(b.GetY() - a.GetY()));
@@ -19,22 +39,12 @@ bool bsp(Point const a, Point const b, Point const c, Point const point) {
   Point ap =
       Point(Fixed(point.GetX() - a.GetX()), Fixed(point.GetY() - a.GetY()));
   Fixed fixed_0(0);
+  Point arr[2];
 
-  std::cout << "[1]" << std::endl;
-  Fixed det(ab.GetX() * ac.GetY() - ab.GetY() * ac.GetX());
-  if (det == fixed_0) {
+  if (!InverseMatrix(arr, ab, ac)) {
     return (false);
   }
-  std::cout << "[2]" << std::endl;
-  std::cout << ab.GetX() * Fixed(-1) << std::endl;
-  Point arr[2] = {Point(ac.GetY(), ab.GetY() * Fixed(-1)),
-                  Point(ac.GetX() * Fixed(-1), ab.GetX())};
-  std::cout << "[3]" << std::endl;
-  arr[0].SetX(arr[0].GetX() / det);
-  arr[0].SetY(arr[0].GetY() / det);
-  arr[1].SetX(arr[1].GetX() / det);
-  arr[1].SetY(arr[1].GetY() / det);
-  std::cout << "[4]" << std::endl;
+
   Point iap(arr[0].GetX() * ap.GetX() + arr[1].GetX() * ap.GetY(),
             arr[0].GetY() * ap.GetX() + arr[1].GetY() * ap.GetY());
   std::cout << "X' = " << iap.GetX() << std::endl;

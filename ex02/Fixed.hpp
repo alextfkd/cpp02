@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:50:12 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/23 07:26:30 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/23 09:06:03 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,7 @@ class Fixed {
   static const int kInt24Min          = -8388608;
   static const int kIntMax            = INT_MAX;
   static const int kIntMin            = INT_MIN;
-  /*
-  static const float kFloatScaleFactor  = 256;
-  static const float kFloat24Max        = 8388607.;
-  static const float kFloat24Min        = -8388608.;
-  */
+
   static const float kFloatScaleFactor;
   static const float kFloat24Max;
   static const float kFloat24Min;
