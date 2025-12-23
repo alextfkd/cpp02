@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:50:15 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/19 06:57:55 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/22 00:47:50 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int main(void) {                               // NOLINT
   Fixed       a;                               // NOLINT
-  Fixed const b(Fixed(5.05f) * Fixed(2));      // NOLINT
+  Fixed const b(Fixed(5.05f) * Fixed(-1));     // NOLINT
   std::cout << a << std::endl;                 // NOLINT
   std::cout << ++a << std::endl;               // NOLINT
   std::cout << a << std::endl;                 // NOLINT

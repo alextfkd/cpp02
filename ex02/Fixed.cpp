@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:50:10 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/19 12:45:51 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/23 08:03:32 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,45 +15,37 @@
 #include <limits>
 #include <stdexcept>
 
-Fixed::Fixed() : value_(0) {
-  std::cout << "Default constructor called" << std::endl;
-}
+const float Fixed::kFloatScaleFactor = 256.0F;
+const float Fixed::kFloat24Max       = 8388607.0F;
+const float Fixed::kFloat24Min       = -8388608.0F;
+
+Fixed::Fixed() : value_(0) {}
 
 Fixed::Fixed(const int& num) : value_(0) {
-  int int_frac_bits = (1 << Fixed::kNbFractionalBits_);
-
-  std::cout << "Int constructor called" << std::endl;
-  if (num > 0 && (Fixed::kIntMax / int_frac_bits) < num) {
-    throw std::overflow_error("Error: RawBits excessed INT_MAX");
+  if (num < Fixed::kInt24Min) {
+    std::cerr << "Error: value < -1 * 2 ^ 23" << std::endl;
+  } else if (num > Fixed::kInt24Max) {
+    std::cerr << "Error: value > 2 ^ 23 - 1" << std::endl;
   }
-  if (num < 0 && (Fixed::kIntMin / int_frac_bits) > num) {
-    throw std::overflow_error("Error: RawBits excessed INT_MIN");
-  }
-  this->setRawBits(num * int_frac_bits);
+  this->setRawBits(num << Fixed::kNbFractionalBits_);
 }
 
 Fixed::Fixed(const float& num) : value_(0) {
-  int int_frac_bits = (1 << Fixed::kNbFractionalBits_);
-
-  std::cout << "Float constructor called" << std::endl;
-  if (num > 0 && (Fixed::kIntMax / int_frac_bits) < int(roundf(num))) {
-    throw std::overflow_error("Error: RawBits excessed INT_MAX");
+  if (num < Fixed::kFloat24Min) {
+    std::cerr << "Error: value < -1 * 2 ^ 23" << std::endl;
+  } else if (num > Fixed::kFloat24Max) {
+    std::cerr << "Error: value > 2 ^ 23 - 1" << std::endl;
   }
-  if (num < 0 && (Fixed::kIntMin / int_frac_bits) > int(roundf(num))) {
-    throw std::overflow_error("Error: RawBits excessed INT_MIN");
-  }
-  this->setRawBits(int(roundf(num * float(int_frac_bits))));
+  this->setRawBits(int(roundf(num * Fixed::kFloatScaleFactor)));
 }
 
-Fixed::~Fixed() { std::cout << "Destructor called" << std::endl; }
+Fixed::~Fixed() {}
 
-Fixed::Fixed(const Fixed& other) {
-  std::cout << "Copy constructor called" << std::endl;
-  *this = other;
-}
+Fixed::Fixed(const Fixed& other) { *this = other; }
+
 // converts the fixed-point value to a floating-point value.
 float Fixed::toFloat(void) const {
-  return (float(this->getRawBits()) / (1 << Fixed::kNbFractionalBits_));
+  return (float(this->getRawBits()) / Fixed::kFloatScaleFactor);
 }
 
 // converts the fixed-point value to an integer value.
@@ -64,7 +56,6 @@ int Fixed::toInt(void) const {
 }
 
 Fixed& Fixed::operator=(const Fixed& other) {
-  std::cout << "Copy assignment operator called" << std::endl;
   if (this != &other) {
     this->value_ = other.getRawBits();
   }
@@ -90,64 +81,67 @@ bool Fixed::operator!=(const Fixed& other) const {
   return (this->getRawBits() != other.getRawBits());
 }
 
-bool Fixed::CheckOverflow(int lvalue, int rvalue) {
-  if (lvalue > Fixed::kIntMax - rvalue) {
-    return false;
+Fixed Fixed::operator+(const Fixed& other) const {
+  int thisbits  = this->getRawBits();
+  int otherbits = other.getRawBits();
+  if (otherbits > 0 && thisbits > Fixed::kIntMax - otherbits) {
+    std::cerr << "Error: Overflow" << std::endl;
   }
-  if (lvalue < Fixed::kIntMin + rvalue) {
-    return false;
+  if (otherbits < 0 && thisbits < Fixed::kIntMin - otherbits) {
+    std::cerr << "Error: Underflow" << std::endl;
   }
-  return true;
+  Fixed res;
+  res.setRawBits((this->getRawBits() + other.getRawBits()));
+  return res;
 }
 
-Fixed& Fixed::operator+(const Fixed& other) {
-  if (!CheckOverflow(this->getRawBits(), other.getRawBits())) {
-    throw std::overflow_error("Overflow Error");
+Fixed Fixed::operator-(const Fixed& other) const {
+  int thisbits  = this->getRawBits();
+  int otherbits = other.getRawBits();
+  if (otherbits < 0 && thisbits > Fixed::kIntMax + otherbits) {
+    std::cerr << "Error: Overflow" << std::endl;
   }
-  this->setRawBits((this->getRawBits() + other.getRawBits()));
-  return *this;
+  if (otherbits > 0 && thisbits < Fixed::kIntMin + otherbits) {
+    std::cerr << "Error: Underflow" << std::endl;
+  }
+  Fixed res;
+  res.setRawBits((this->getRawBits() - other.getRawBits()));
+  return res;
 }
 
-Fixed& Fixed::operator-(const Fixed& other) {
-  if (!CheckOverflow(this->getRawBits(), other.getRawBits())) {
-    throw std::overflow_error("Overflow Error");
+Fixed Fixed::operator*(const Fixed& other) const {
+  int  thisbits  = this->getRawBits();
+  int  otherbits = other.getRawBits();
+  long tmp = (long)thisbits * (long)otherbits / (long)Fixed::kIntScaleFactor;
+
+  if (tmp > (long)Fixed::kIntMax) {
+    std::cerr << "Error: Overflow" << std::endl;
   }
-  this->setRawBits((this->getRawBits() - other.getRawBits()));
-  return *this;
+  if (tmp < (long)Fixed::kIntMin) {
+    std::cerr << "Error: Underflow" << std::endl;
+  }
+  Fixed res;
+  res.setRawBits((int)tmp);
+  return res;
 }
 
-Fixed& Fixed::operator*(const Fixed& other) {
-  int int_frac_bits = (1 << Fixed::kNbFractionalBits_);
-  if (this->getRawBits() == 0 || other.getRawBits() == 0) {
-    this->setRawBits(0);
-    return *this;
+Fixed Fixed::operator/(const Fixed& other) const {
+  int   thisbits  = this->getRawBits();
+  int   otherbits = other.getRawBits();
+  Fixed res;
+  if (otherbits == 0) {
+    std::cerr << "Error: Zero Division" << std::endl;
   }
-  if (this->getRawBits() > Fixed::kIntMax / other.getRawBits()) {
-    throw std::overflow_error("Overflow Error");
-  }
-  if (this->getRawBits() < Fixed::kIntMin / other.getRawBits()) {
-    throw std::overflow_error("Overflow Error");
-  }
-  this->setRawBits(this->getRawBits() * other.getRawBits() / int_frac_bits);
-  return *this;
-}
+  long tmp = (long)thisbits * (long)Fixed::kIntScaleFactor / (long)otherbits;
 
-Fixed& Fixed::operator/(const Fixed& other) {
-  if (other.getRawBits() == 0) {
-    throw std::overflow_error("Overflow Error");
+  if (tmp > (long)Fixed::kIntMax) {
+    std::cerr << "Error: Overflow" << std::endl;
   }
-  if (this->getRawBits() == 0) {
-    this->setRawBits(0);
-    return *this;
+  if (tmp < (long)Fixed::kIntMin) {
+    std::cerr << "Error: Underflow" << std::endl;
   }
-  if (this->getRawBits() > Fixed::kIntMax * other.getRawBits()) {
-    throw std::overflow_error("Overflow Error");
-  }
-  if (this->getRawBits() < Fixed::kIntMin * other.getRawBits()) {
-    throw std::overflow_error("Overflow Error");
-  }
-  this->setRawBits(this->getRawBits() / other.getRawBits());
-  return *this;
+  res.setRawBits((int)tmp);
+  return res;
 }
 
 Fixed& Fixed::operator++() {
@@ -171,7 +165,6 @@ Fixed Fixed::operator--(int) {
 
 int Fixed::getRawBits(void) const { return (this->value_); }
 
-// sets the raw value of the fixed-point number.
 void Fixed::setRawBits(int const raw) { this->value_ = raw; }
 
 std::ostream& operator<<(std::ostream& ostream, const Fixed& other) {
