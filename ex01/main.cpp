@@ -6,12 +6,11 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:50:15 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/19 04:31:13 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/24 05:37:19 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Fixed.hpp"
-// *
 
 int main(void) {
   Fixed       a;                                                    // NOLINT
