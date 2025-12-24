@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 14:51:54 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/23 09:51:29 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/24 05:29:41 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,9 @@ class Point {
 
   Fixed GetX() const;
   Fixed GetY() const;
+
+  static Point Vector(const Point& start, const Point& end);
 };
-
-Fixed det(Point& vector0, Point& vector1);
-
-bool InverseMatrix(Point arr[2], Point& vector0, Point& vector1);
-// Point* InverseMatrix(Point& vector0, Point& vector1);
 
 bool bsp(Point const a, Point const b, Point const c,  // NOLINT
          Point const point);                           // NOLINT

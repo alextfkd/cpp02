@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 06:53:33 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/23 09:22:58 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/24 05:21:03 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,3 +36,8 @@ Fixed Point::GetX(void) const { return (this->x_); }
 Fixed Point::GetY(void) const { return (this->y_); }
 void  Point::SetX(const Fixed& x) { this->x_ = x; }  // NOLINT
 void  Point::SetY(const Fixed& y) { this->y_ = y; }  // NOLINT
+
+Point Point::Vector(const Point& start, const Point& end) {
+  return Point(Fixed(end.GetX() - start.GetX()),
+               Fixed(end.GetY() - start.GetY()));
+}
