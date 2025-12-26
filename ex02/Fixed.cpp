@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:50:10 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/23 08:03:32 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/26 07:12:29 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,10 @@ int Fixed::getRawBits(void) const { return (this->value_); }
 void Fixed::setRawBits(int const raw) { this->value_ = raw; }
 
 std::ostream& operator<<(std::ostream& ostream, const Fixed& other) {
+  if (other.getRawBits() % 256 == 0) {
+    ostream << other.toInt();
+    return ostream;
+  }
   ostream << other.toFloat();
   return ostream;
 }
