@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 00:32:39 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/24 05:30:34 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2025/12/26 14:09:20 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static Fixed CalcDet(Point& vec0, Point& vec1);
 static bool  InverseMatrix(Point arr[2], Point& vec0, Point& vec1);
 static Point TransformVector(const Point arr[2], const Point& vec);
 static bool  IsInTriangle(const Point& vec);
+
+bool x(Point const v1, Point const v2, Point const v3) {}  // NOLINT
 
 bool bsp(Point const a, Point const b, Point const c,  // NOLINT
          Point const point) {                          // NOLINT
