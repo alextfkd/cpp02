@@ -6,7 +6,7 @@
 /*   By: tkatsuma <tkatsuma@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:50:10 by tkatsuma          #+#    #+#             */
-/*   Updated: 2025/12/26 15:49:10 by tkatsuma         ###   ########.fr       */
+/*   Updated: 2026/01/16 18:05:52 by tkatsuma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@ const float Fixed::kFloat24Max       = 8388607.0F;
 const float Fixed::kFloat24Min       = -8388608.0F;
 
 void Fixed::setMax() {
+  std::cerr << "Overflow Error: Clipping values..." << std::endl;
   this->setRawBits(Fixed::kInt24Max << Fixed::kNbFractionalBits_);
 }
 
 void Fixed::setMin() {
+  std::cerr << "Underflow Error: Clipping values..." << std::endl;
   this->setRawBits(Fixed::kInt24Min * (1 << Fixed::kNbFractionalBits_));
 }
 
@@ -31,12 +33,12 @@ Fixed::Fixed() : value_(0) {}
 
 Fixed::Fixed(const int& num) : value_(0) {
   if (num < Fixed::kInt24Min) {
-    std::cerr << "Error: value < -1 * 2 ^ 23" << std::endl;
+    std::cerr << "Notice: value < -1 * 2 ^ 23" << std::endl;
     this->setMin();
     return;
   }
   if (num > Fixed::kInt24Max) {
-    std::cerr << "Error: value > 2 ^ 23 - 1" << std::endl;
+    std::cerr << "Notice: value > 2 ^ 23 - 1" << std::endl;
     this->setMax();
     return;
   }
@@ -45,12 +47,10 @@ Fixed::Fixed(const int& num) : value_(0) {
 
 Fixed::Fixed(const float& num) : value_(0) {
   if (num < Fixed::kFloat24Min) {
-    std::cerr << "Error: value < -1 * 2 ^ 23" << std::endl;
     this->setMin();
     return;
   }
   if (num > Fixed::kFloat24Max) {
-    std::cerr << "Error: value > 2 ^ 23 - 1" << std::endl;
     this->setMax();
     return;
   }
@@ -105,12 +105,10 @@ Fixed Fixed::operator+(const Fixed& other) const {
   int   otherbits = other.getRawBits();
 
   if (otherbits > 0 && thisbits > Fixed::kIntMax - otherbits) {
-    std::cerr << "Error: Overflow" << std::endl;
     res.setMax();
     return res;
   }
   if (otherbits < 0 && thisbits < Fixed::kIntMin - otherbits) {
-    std::cerr << "Error: Underflow" << std::endl;
     res.setMin();
     return res;
   }
@@ -124,12 +122,10 @@ Fixed Fixed::operator-(const Fixed& other) const {
   int   otherbits = other.getRawBits();
 
   if (otherbits < 0 && thisbits > Fixed::kIntMax + otherbits) {
-    std::cerr << "Error: Overflow" << std::endl;
     res.setMax();
     return res;
   }
   if (otherbits > 0 && thisbits < Fixed::kIntMin + otherbits) {
-    std::cerr << "Error: Underflow" << std::endl;
     res.setMin();
     return res;
   }
@@ -144,12 +140,10 @@ Fixed Fixed::operator*(const Fixed& other) const {
   long  tmp = (long)thisbits * (long)otherbits / (long)Fixed::kIntScaleFactor;
 
   if (tmp > (long)Fixed::kIntMax) {
-    std::cerr << "Error: Overflow" << std::endl;
     res.setMax();
     return res;
   }
   if (tmp < (long)Fixed::kIntMin) {
-    std::cerr << "Error: Underflow" << std::endl;
     res.setMin();
     return res;
   }
@@ -168,12 +162,10 @@ Fixed Fixed::operator/(const Fixed& other) const {
   }
   tmp = (long)thisbits * (long)Fixed::kIntScaleFactor / (long)otherbits;
   if (tmp > (long)Fixed::kIntMax) {
-    std::cerr << "Error: Overflow" << std::endl;
     res.setMax();
     return res;
   }
   if (tmp < (long)Fixed::kIntMin) {
-    std::cerr << "Error: Underflow" << std::endl;
     res.setMin();
     return res;
   }
